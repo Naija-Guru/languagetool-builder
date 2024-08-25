@@ -41,6 +41,7 @@ jobs:
             -pl org.languagetool:languagetool-server \
             -pl org.languagetool:languagetool-standalone \
             -pl org.languagetool:language-pcm
+          ./build.sh languagetool-standalone package -DskipTests
           cp -a languagetool-standalone/target/LanguageTool-${{ github.event.inputs.revision }}/LanguageTool-${{ github.event.inputs.revision }}/. ../build/
           cd ${{ github.workspace }}
 
