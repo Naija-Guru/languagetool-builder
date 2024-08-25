@@ -1,0 +1,33 @@
+services:
+  reverse-proxy:
+    image: traefik:v3.1
+    command:
+      - "--log.level=INFO"
+      - "--log.filePath=/var/log/traefik/traefik.log"
+      - "--log.maxage=7"
+      - "--accesslog=true"
+      - "--accesslog.filepath=/var/log/traefik/access.log"
+      - "--providers.docker"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.websecure.address=:443"
+      - "--certificatesresolvers.lt-pcm-resolver.acme.tlschallenge=true"
+      #- "--certificatesresolvers.lt-pcm-resolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.lt-pcm-resolver.acme.email=tech@naija.guru"
+      - "--certificatesresolvers.lt-pcm-resolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "443:443"
+    volumes:
+      - "./letsencrypt:/letsencrypt"
+      - "./logs/traefik:/var/log/traefik"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  languagetool-pcm:
+    image: ghcr.io/Naija-Guru/languagetool:latest
+    expose:
+      - "8081"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.languagetool-pcm.rule=Host(`spellchecker-x.xx.naija.guru`)"
+      - "traefik.http.services.languagetool-pcm.loadbalancer.server.port=8081"
+      - "traefik.http.routers.languagetool-pcm.entrypoints=websecure"
+      - "traefik.http.routers.languagetool-pcm.tls.certresolver=lt-pcm-resolver"

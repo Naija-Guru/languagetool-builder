@@ -1,0 +1,61 @@
+name: Build and publish LanguageTool
+
+run-name: ${{ github.actor }} is building and publishing LanguageTool.
+
+on:
+  workflow_dispatch:
+    inputs:
+      revision:
+        type: string
+        description: LanguageTool revision (see pom.xml) e.g 6.5-SNAPSHOT
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout LanguageTool builder
+        uses: actions/checkout@v4
+        with:
+          path: languagetool-builder
+
+      - name: Checkout LanguageTool
+        uses: actions/checkout@v4
+        with:
+          repository: Naija-Guru/languagetool
+          path: languagetool
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - run: mkdir build
+      - run: cp languagetool-builder/Dockerfile Dockerfile
+
+      - name: Build and test LanguageTool
+        run: |
+          cd languagetool
+          mvn clean test \
+            -pl org.languagetool:languagetool-core \
+            -pl org.languagetool:languagetool-server \
+            -pl org.languagetool:languagetool-standalone \
+            -pl org.languagetool:language-pcm
+          cp -a languagetool-standalone/target/LanguageTool-${{ github.event.inputs.revision }}/LanguageTool-${{ github.event.inputs.revision }}/. ../build/
+          cd ${{ github.workspace }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/Naija-Guru/languagetool:latest
+            ghcr.io/Naija-Guru/languagetool:${{ github.event.inputs.revision }}
