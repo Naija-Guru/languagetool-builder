@@ -1,8 +1,5 @@
 FROM eclipse-temurin:21
 
-LABEL org.opencontainers.image.source=https://github.com/Naija-Guru/languagetool
-LABEL org.opencontainers.image.description="Nigerian Pidgin (pcm-NG) LanguageTool server"
-
 RUN mkdir /opt/languagetool
 COPY ./build /opt/languagetool
 RUN touch /opt/languagetool/server.properties

@@ -1,6 +1,6 @@
 name: Build and publish LanguageTool
 
-run-name: ${{ github.actor }} is building and publishing LanguageTool.
+run-name: ${{ github.actor }} is building and publishing LanguageTool with revision ${{ github.event.inputs.revision }}.
 
 on:
   workflow_dispatch:
