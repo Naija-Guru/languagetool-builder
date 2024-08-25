@@ -58,5 +58,5 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/Naija-Guru/languagetool:latest
-            ghcr.io/Naija-Guru/languagetool:${{ github.event.inputs.revision }}
+            ghcr.io/naija-guru/languagetool:latest
+            ghcr.io/naija-guru/languagetool:${{ github.event.inputs.revision }}

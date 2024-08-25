@@ -22,7 +22,7 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
 
   languagetool-pcm:
-    image: ghcr.io/Naija-Guru/languagetool:latest
+    image: ghcr.io/naija-guru/languagetool:latest
     expose:
       - "8081"
     labels:
