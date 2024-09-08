@@ -32,10 +32,12 @@ Build/deployment configs and docs for [Naija Guru's LanguageTool fork](https://g
 
 ## Upgrade
 - Run `docker compose down`.
-- Clear old Traefik access logs.
+- Clear old logs.
     ```sh
     rm logs/traefik/old-access.log
     mv logs/traefik/access.log logs/traefik/old-access.log
+    rm logs/languagetool-pcm/old-languagetool.log
+    mv logs/languagetool-pcm/languagetool.log logs/languagetool-pcm/old-languagetool.log
     sudo service filebeat start
     ```
 - Run `docker compose up -d`.

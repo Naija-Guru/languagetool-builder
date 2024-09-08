@@ -31,3 +31,5 @@ services:
       - "traefik.http.services.languagetool-pcm.loadbalancer.server.port=8081"
       - "traefik.http.routers.languagetool-pcm.entrypoints=websecure"
       - "traefik.http.routers.languagetool-pcm.tls.certresolver=lt-pcm-resolver"
+    volumes:
+      - "./logs/languagetool-pcm:/var/log/languagetool-pcm"
