@@ -38,6 +38,7 @@ Build/deployment configs and docs for [Naija Guru's LanguageTool fork](https://g
     mv logs/traefik/access.log logs/traefik/old-access.log
     rm logs/languagetool-pcm/old-languagetool.log
     mv logs/languagetool-pcm/languagetool.log logs/languagetool-pcm/old-languagetool.log
-    sudo service filebeat start
+    sudo service filebeat restart
     ```
+- Run `docker compose pull`.
 - Run `docker compose up -d`.
